@@ -1,42 +1,50 @@
 "use strict"
 
-let lang = 'en' 
-let engDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-let rusDays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота','Воскресенье']
 
-if (lang == 'en') {
-    console.log(engDays)
-} else if (lang == 'ru') {
-    console.log(rusDays)
-} else {
-    console.log('Укажите ru или en') 
+const showWeekDays = {
+    date: {},
+    currentDay: 0,
+    block: {},
+    rusDays: [],
+    daysOnPage: [],
+
+    getWeekDay: function () {
+        showWeekDays.rusDays = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота' ]
+        showWeekDays.date = new Date();
+        showWeekDays.currentDay = showWeekDays.date.getDay();
+        console.log('Текущий день ' + showWeekDays.rusDays[showWeekDays.currentDay])
+        
+    
+        for (let day of showWeekDays.rusDays){
+            showWeekDays.block = document.createElement('div')
+            showWeekDays.block.innerText = day.toString()
+        document.body.appendChild(showWeekDays.block)
+    }
+    
+    
+    showWeekDays.daysOnPage = document.querySelectorAll('div')
+          
+            for(let item of showWeekDays.daysOnPage){
+                if(item.innerHTML === showWeekDays.rusDays[showWeekDays.currentDay]){
+                    item.style.fontWeight = 'bold'
+                } 
+            }
+    
+            showWeekDays.daysOnPage[0].style.fontStyle = 'italic'
+            showWeekDays.daysOnPage[6].style.fontStyle = 'italic'
+           
+
+        return showWeekDays.rusDays[showWeekDays.currentDay];
+    }
+
+
 }
 
 
-lang = 'ru' 
-switch (true){
-    case lang == 'en':
-        console.log(engDays);
-        break;
-    case lang == 'ru':
-         console.log(rusDays);
-        break;
-    default:
-        console.log('Укажите ru или en')   
-}
-
-
-lang = 'en' 
-let daysArray = [
-    ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-    ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота','Воскресенье'] 
-]
-
-let showDays = (lang == 'en') ? console.log(daysArray[0]):console.log(daysArray[1]);
 
 
 
+showWeekDays.getWeekDay()
 
 
-let namePerson =''
-let result = (namePerson == 'Артем') ? console.log('директор'):(namePerson == 'Александр') ? console.log('преподаватель'):console.log('cтудент');
+
