@@ -1,160 +1,58 @@
-"use strict"
-
-
-const appData = {
-    rollback: 25,
-    title: '',
-    screens: [],
-    screenPrice: 0,
-    servicePercentPrice: 0,
-    allServicePrices: 0,
-    services: {},
-    adaptive: true,
-    fullPrice: 0,
-    getScreenPrice: '',
-    getAddServiceSum: 0,
-    logMessage: '',
-    bigFirstLetter: [], 
-    titleArrayToString: '',
-    titleToLow: '',
-    titleArray: [],
-
-    
-    isNumber: function(num){
-    return !isNaN(parseFloat(num)) && isFinite(num)
-},
-
-    questions: function(){
-        do {
-            appData.title =prompt('Как называется ваш проект?', 'Калькулятор верстки')
-        } while (appData.isNumber(appData.title))
-     
-        for (let i=0; i<2; i++){
-            let name 
-            do{
-                name = prompt('Какие типы экранов нужно разработать?')  
-            }while(appData.isNumber(name))
-
-            let price = 0
-            do{
-                price = prompt('Сколько будет стоить данная работа?')
-            } while(!appData.isNumber(price))
-            
-            appData.screens.push({id: i, name: name + '_id' + i, price: price})
-        }
-           
-        for (let i=0; i<2; i++){
-            let name 
-            do{
-            name = prompt('Какой дополнительный тип услуги нужен?')
-            }while(appData.isNumber(name))
-
-            let price = 0
-         do  {
-            price = prompt('Сколько будет стоить данная работа?')   
-            } while(!appData.isNumber(price))
-
-    appData.services[name] = +price
-    }
-
-    appData.adaptive = confirm('Нужен ли адаптив на сайте?')
-        
-         },
-   
-    addPrices: function(){
-            appData.screenPrice = appData.screens.reduce(function(sum, key){
-                return  sum += +key.price
-            }, 0)
-        
-            for(let key in appData.services){
-                appData.allServicePrices +=  appData.services[key]
-            }
-         },
-
-    getFullPrice: function(){
-        appData.fullPrice =  appData.screenPrice + appData.allServicePrices
-},
- 
-    getServicePercentPrices: function(){
-        appData.servicePercentPrice =  parseFloat(appData.fullPrice - (appData.fullPrice * (appData.rollback/100)))
-},
-
-   showMessage: function (){
-    switch (true){
-    case appData.fullPrice > 30000:
-        console.log('Даем скидку в 10%')
-        break;
-    case appData.fullPrice > 15000 &&  appData.fullPrice < 30000:
-        console.log('Даем скидку в 5%')
-        break;
-    case appData.fullPrice < 15000 && appData.fullPrice > 0:
-      console.log('Скидка не предусмотрена')
-        break;
-    case appData.fullPrice < 0:
-        console.log('Что то пошло не так')
-        break;
-    case appData.fullPrice == 0:
-    case appData.fullPrice == 15000:
-    case appData.fullPrice == 30000:
-        console.log('Минимальная стоимость заказа должна превышать 50000')
-    break;
-    default:
-        console.log('Проверьте корректность введенных данных')
-}
-
-},
-   getTitle: function(){
-    appData.titleToLow =  appData.title.toLowerCase()
-    appData.titleArray = appData.titleToLow.split("")
-    
-    function makeBigFirstLetter(){
-        appData.bigFirstLetter = appData.titleArray[0].toUpperCase()
-        appData.titleArray.shift();
-        appData.titleArray.unshift(appData.bigFirstLetter)
-        appData.titleArrayToString = appData.titleArray.join('')
-        appData.title = appData.titleArrayToString
-        appData.title =  appData.title 
-        }
-    
-        if(appData.titleArray[0] == ' '){
-            appData.titleArray.splice(0, 1)
-            makeBigFirstLetter()
-        } else {
-            makeBigFirstLetter()
-        } 
-    }, 
-
-   logger: function(){
-    console.log(appData.screens)
-    console.log(appData.fullPrice)
-    console.log("Стоимость верстки экранов " + appData.screenPrice + ' рублей/ долларов/гривен/юани')
-    console.log('Стоимость разработки сайта' + ' ' + appData.servicePercentPrice + ' ' + 'рублей/ долларов/гривен/юани')
+'use strict'
+const showDate = {
+    dateForDateWithText: {},
+    dateForDateWithoutText: {},
+    dateWithText: {},
+    currentDay: 0,
+    currentMonth: 0,
+    block: {},
+    timerIdOne: {},
+    timerIdTwo: {},
+    rusDays: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
+    rusMonths: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнб", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+    hours: ['час', 'часов', 'часа'],
+    hoursText: {},
+    chas: '',
+    chasa: '',
+    chasov: '',
+    arrayToRemove: [],
+    showDateWithText: function() {
+        showDate.dateForDateWithText = new Date();
+        showDate.currentDay = showDate.dateForDateWithText.getDay()
+        showDate.currentMonth = showDate.dateForDateWithText.getMonth()
+        showDate.dateWithText = document.createElement('div')
+        showDate.dateWithText.innerHTML = 'Сегодня ' + showDate.rusDays[showDate.currentDay] + ', ' + showDate.dateForDateWithText.getDate() + ' ' + showDate.rusMonths[showDate.currentMonth] + ' ' + showDate.dateForDateWithText.getFullYear() + ' года ' + showDate.dateForDateWithText.getHours() + " час " + showDate.dateForDateWithText.getMinutes() + " минут " + showDate.dateForDateWithText.getSeconds() + ' секунд '
+        showDate.dateWithText.classList.add('date-with-text')   
+        document.body.append(showDate.dateWithText)
     },
-
-    start: function(){
-    appData.questions()
-    appData.addPrices()
-    appData.getFullPrice()
-    appData.getServicePercentPrices()
-    appData.showMessage()
-    appData.getTitle()
-    appData.logger()
- },
+    showDateWithoutText: function() {
+        showDate.arrayToRemove = document.querySelectorAll('.date, .date-with-text')
+        showDate.dateForDateWithoutText = new Date();
+        showDate.currentMonthNum = showDate.dateForDateWithoutText.getMonth()
+        showDate.dateWithoutText = document.createElement('div')
+        showDate.dateWithoutText.innerHTML = showDate.dateForDateWithoutText.getDate() + "." + (showDate.currentMonthNum + 1) + '.' + showDate.dateForDateWithoutText.getFullYear() + ' - ' + showDate.dateForDateWithoutText.getHours() + ":" + showDate.dateForDateWithoutText.getMinutes() + ":" + showDate.dateForDateWithoutText.getSeconds()
+        showDate.dateWithoutText.classList.add('date')   
+        document.body.append(showDate.dateWithoutText)
+    },
+    grammar: function() {
+        hoursText = function() {
+            chas = showDate.dateForDateWithoutText.getHours()[0] + ' час'
+            chasa = function() {
+                for(let i = 1; i <= 4; i++) {
+                    return showDate.dateForDateWithoutText.getHours()[i] + ' часа'
+                }
+            }
+            chasov = function() {
+                for(let i = 4; showDate.hours.length <= 4; i++) {
+                    return showDate.dateForDateWithoutText.getHours()[i] + ' часов'
+                }
+            }
+        }
+    },
+    start: function() {
+        showDate.timerIdOne = setInterval(showDate.showDateWithText, 1000);
+        showDate.timerIdTwo = setInterval(showDate.showDateWithoutText, 1000);
+        showDate.grammar()
+    }
 }
-
-
-appData.start()
-
-
-
-
-
-
-/* function getTitle(){
-    return appData.title.trim()[0].toUpperCase()+ appData.title.trim().substr(1).toLowerCase
-} */
-
-
-
-
-
+showDate.start()
